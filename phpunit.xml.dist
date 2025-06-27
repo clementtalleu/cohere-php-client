@@ -8,7 +8,6 @@
 >
     <php>
         <env name="APP_DEBUG" value="false" />
-        <server name="KERNEL_CLASS" value="Talleu\RedisOm\Tests\ApiPlatform\Kernel" />
     </php>
 
     <testsuites>
