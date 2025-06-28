@@ -3,6 +3,15 @@
 [![Packagist Version](https://img.shields.io/packagist/v/talleu/cohere-php-client.svg)](https://packagist.org/packages/talleu/cohere-php-client)
 [![GitHub](https://img.shields.io/github/license/clementtalleu/cohere-php-client.svg)](https://github.com/averias/phpredis-json)
 
+
+
+
+# ⚠️ Do not install yet, not tested 
+
+
+
+
+---------
 ## Cohere PHP Client
 
 A PHP client to interact with the [Cohere® API](https://cohere.com/), designed to be framework-agnostic, simple to use,
