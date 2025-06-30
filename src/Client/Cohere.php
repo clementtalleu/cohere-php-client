@@ -18,6 +18,8 @@ final class Cohere
         ?RequestFactoryInterface $requestFactory = null,
         ?StreamFactoryInterface $streamFactory = null,
     ): CohereClient {
+        
+        
         return new CohereClient(
             $apiKey,
             $baseUri,

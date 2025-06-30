@@ -17,13 +17,15 @@ final class Embed
 
     /**
      * @see https://docs.cohere.com/reference/embed
+     * @param null|string[] $texts
      */
-    public function create(?array $params = []): EmbedObject
+    public function create(?array $texts = [], ?array $params = []): EmbedObject
     {
         if (!array_key_exists('model', $params)) {
             $params['model'] = self::DEFAULT_MODEL;
         }
 
+        $params['texts'] = $texts;
         $response = $this->client->sendRequest('POST', '/v2/embed', $params);
 
         return EmbedObject::create($response);

@@ -31,7 +31,9 @@ final class Model
     {
         $query = http_build_query($params);
         $response = $this->client->sendRequest('GET', "/v1/models?$query");
-
+        
+        // dd($response['models'][0]);
+        
         $models = [];
         foreach ($response['models'] as $model) {
             $models[] = ModelObject::create($model);

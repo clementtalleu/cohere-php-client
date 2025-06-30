@@ -11,9 +11,11 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Talleu\CohereClient\Resources\Chat\Chat;
 use Talleu\CohereClient\Resources\Classify\Classify;
+use Talleu\CohereClient\Resources\Dataset\Dataset;
 use Talleu\CohereClient\Resources\Detokenize\Detokenize;
 use Talleu\CohereClient\Resources\Embed\Embed;
 use Talleu\CohereClient\Resources\EmbedJob\EmbedJob;
+use Talleu\CohereClient\Resources\FineTuning\FineTuning;
 use Talleu\CohereClient\Resources\Model\Model;
 use Talleu\CohereClient\Resources\Rerank\Rerank;
 use Talleu\CohereClient\Resources\Tokenize\Tokenize;
@@ -30,7 +32,7 @@ final class CohereClient implements CohereClientInterface
         private ?RequestFactoryInterface $requestFactory = null,
         private ?StreamFactoryInterface $streamFactory = null,
     ) {
-        $this->apiKey = $apiKey ?? getenv('COHERE_API_KEY');
+        $this->apiKey = $apiKey ?? $_ENV['COHERE_API_KEY'];
         $this->baseUri = $baseUri ?? self::COHERE_API_BASE_URL;
         $this->httpClient = $httpClient ?? Psr18ClientDiscovery::find();
         $this->requestFactory = $requestFactory ?? Psr17FactoryDiscovery::findRequestFactory();
@@ -55,6 +57,16 @@ final class CohereClient implements CohereClientInterface
     public function classify(): Classify
     {
         return new Classify($this);
+    }
+
+    public function fineTuning(): FineTuning
+    {
+        return new FineTuning($this);
+    }
+
+    public function dataset(): Dataset
+    {
+        return new Dataset($this);
     }
 
     public function tokenize(): Tokenize
@@ -87,12 +99,57 @@ final class CohereClient implements CohereClientInterface
         if ($this->clientName) {
             $request->withHeader('X-Client-Name', $this->clientName);
         }
-
+        
         if ($body) {
             $payload = json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             $stream = $this->streamFactory->createStream($payload);
             $request = $request->withBody($stream);
         }
+        
+        $response = $this->httpClient->sendRequest($request);
+        $statusCode = $response->getStatusCode();
+        $bodyResponse = json_decode($response->getBody()->getContents(), true);
+        
+        if (($statusCode = $response->getStatusCode()) >= 400) {
+            
+            throw new \RuntimeException(sprintf(
+                'Cohere API returned HTTP %d: %s',
+                $statusCode,
+                $bodyResponse['message']
+            ));
+        }
+        
+        return $bodyResponse;
+    }
+
+    public function sendMultipartRequest(string $method, string $path, array $formFields, string $fileFieldName, string $filePath): array
+    {
+        $boundary = uniqid('boundary_');
+
+        $bodyParts = [];
+        foreach ($formFields as $name => $value) {
+            $bodyParts[] = "--$boundary\r\n" .
+                "Content-Disposition: form-data; name=\"$name\"\r\n\r\n" .
+                "$value\r\n";
+        }
+
+        $filename = basename($filePath);
+        $fileContents = file_get_contents($filePath);
+
+        $bodyParts[] = "--$boundary\r\n" .
+            "Content-Disposition: form-data; name=\"$fileFieldName\"; filename=\"$filename\"\r\n" .
+            "Content-Type: application/jsonl\r\n\r\n" .
+            "$fileContents\r\n";
+
+        $bodyParts[] = "--$boundary--\r\n";
+
+        $multipartBody = implode('', $bodyParts);
+        $stream = $this->streamFactory->createStream($multipartBody);
+
+        $request = $this->requestFactory->createRequest($method, $this->baseUri.$path)
+            ->withHeader('Authorization', "Bearer {$this->apiKey}")
+            ->withHeader('Content-Type', "multipart/form-data; boundary=$boundary")
+            ->withBody($stream);
 
         $response = $this->httpClient->sendRequest($request);
 
