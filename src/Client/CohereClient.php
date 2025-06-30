@@ -20,7 +20,7 @@ use Talleu\CohereClient\Resources\Tokenize\Tokenize;
 
 final class CohereClient implements CohereClientInterface
 {
-    public const COHERE_API_BASE_URL = 'https://api.cohere.com/';
+    public const COHERE_API_BASE_URL = 'https://api.cohere.com';
 
     public function __construct(
         private ?string $apiKey = null,
@@ -79,7 +79,7 @@ final class CohereClient implements CohereClientInterface
 
     public function sendRequest(string $method, string $path, ?array $body = null): array
     {
-        $request = $this->requestFactory->createRequest('POST', $this->baseUri.$path)
+        $request = $this->requestFactory->createRequest($method, $this->baseUri.$path)
             ->withHeader('Authorization', 'Bearer ' . $this->apiKey)
             ->withHeader('Content-Type', 'application/json')
             ->withHeader('Accept', 'application/json');
@@ -89,8 +89,9 @@ final class CohereClient implements CohereClientInterface
         }
 
         if ($body) {
-            $stream = $this->streamFactory->createStream(json_encode($body));
-            $request->withBody($stream);
+            $payload = json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $stream = $this->streamFactory->createStream($payload);
+            $request = $request->withBody($stream);
         }
 
         $response = $this->httpClient->sendRequest($request);

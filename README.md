@@ -76,7 +76,7 @@ Minimal example
 ```php
 use Talleu\CohereClient\Cohere;
 
-$client = Cohere::client('your-api-key');
+$client = Cohere::client('your-api-key'); 
 
 // Call the embed endpoint
 $response = $client->embed()->create([
@@ -87,6 +87,17 @@ $response = $client->embed()->create([
 ]);
 
 print_r($response);
+```
+
+Or to simple chats with LLM
+
+```php
+    $chat = $client->chat()->create([
+        [
+            'role' => 'user',
+            'content' => 'how are you ?'
+        ]
+    ]);
 ```
 
 ## Authentication 🔐

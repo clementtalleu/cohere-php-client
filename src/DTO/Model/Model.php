@@ -12,15 +12,16 @@ final class Model
      * @param string[] $features
      */
     public function __construct(
-        public string $name,
-        public array  $endpoints,
-        public bool   $fineTuned,
-        public float  $contextLength,
-        public string $tokenizerUrl,
-        public float  $supportVision,
-        public array  $defaultEndpoints,
-        public array  $features
-    ) {
+        public string  $name,
+        public array   $endpoints,
+        public bool    $fineTuned,
+        public float   $contextLength,
+        public ?string $tokenizerUrl = null,
+        public bool    $supportVision,
+        public array   $defaultEndpoints,
+        public ?array  $features = []
+    )
+    {
     }
 
     /**
@@ -30,9 +31,9 @@ final class Model
      *     fine_tuned: bool,
      *     context_length: float,
      *     tokenizer_url: string,
-     *     support_vision: float,
+     *     support_vision: bool,
      *     default_endpoints: string[],
-     *     features: string[]
+     *     features: null|string[]
      * } $data
      */
     public static function create(array $data): self
@@ -40,10 +41,10 @@ final class Model
         return new self(
             name: $data['name'],
             endpoints: $data['endpoints'],
-            fineTuned: $data['fine_tuned'],
+            fineTuned: $data['finetuned'],
             contextLength: $data['context_length'],
             tokenizerUrl: $data['tokenizer_url'],
-            supportVision: $data['support_vision'],
+            supportVision: $data['supports_vision'],
             defaultEndpoints: $data['default_endpoints'],
             features: $data['features']
         );
