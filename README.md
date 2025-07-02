@@ -4,13 +4,6 @@
 [![GitHub](https://img.shields.io/github/license/clementtalleu/cohere-php-client.svg)](https://github.com/averias/phpredis-json)
 
 
-
-
-# ⚠️ Do not install yet, not tested 
-
-
-
-
 ---------
 ## Cohere PHP Client
 
@@ -40,12 +33,6 @@ This package provides an easy and structured way to use Cohere's powerful langua
 - A PSR-18 compatible HTTP client (
   e.g. [Guzzle](https://github.com/guzzle/guzzle), [Symfony HttpClient](https://symfony.com/doc/current/http_client.html), [HTTPlug clients](https://packagist.org/providers/php-http/client-implementation))
 
-You must also install the following PSR-17 factories (required by discovery):
-
-```bash
-composer require nyholm/psr7
-composer require php-http/discovery
-``` 
 
 ## Installation 📝
 
@@ -69,6 +56,8 @@ Using Guzzle:
 composer require guzzlehttp/guzzle
 ```
 
+Or another client implementing PSR18
+
 ## Basic Usage 🎯
 
 Minimal example
@@ -79,14 +68,12 @@ use Talleu\CohereClient\Cohere;
 $client = Cohere::client('your-api-key'); 
 
 // Call the embed endpoint
-$response = $client->embed()->create([
-    'texts' => [
-        'Cohere is amazing!',
-        'Let’s try embedding some text.'
-    ]
-]);
+$embeds = $client->embed()->create([
+      'Cohere is amazing!',
+      'Let’s try embedding some text.'
+  ]);
 
-print_r($response);
+var_dump($embeds);
 ```
 
 Or to simple chats with LLM
@@ -159,6 +146,17 @@ $connector = $client->connector()->list();
 ```
 
 Each endpoint returns a strongly typed DTO with the result of the API call.
+
+## 📚 Documentation by endpoints
+
+- [Embedding](docs/embed.md)
+- [Chat Completion](docs/chat.md)
+- [Rerank](docs/rerank.md)
+- [Model](docs/model.md)
+- [Connector](docs/connector.md)
+- [Classify](docs/classify.md)
+- [Fine Tuning](docs/fine-tuning.md)
+- [Embed jobs](docs/embed-job.md)
 
 ## Documentation 📚
 
