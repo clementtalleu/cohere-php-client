@@ -11,6 +11,7 @@ use Psr\Http\Message\RequestFactoryInterface;
 use Psr\Http\Message\StreamFactoryInterface;
 use Talleu\CohereClient\Resources\Chat\Chat;
 use Talleu\CohereClient\Resources\Classify\Classify;
+use Talleu\CohereClient\Resources\Connector\Connector;
 use Talleu\CohereClient\Resources\Dataset\Dataset;
 use Talleu\CohereClient\Resources\Detokenize\Detokenize;
 use Talleu\CohereClient\Resources\Embed\Embed;
@@ -82,6 +83,11 @@ final class CohereClient implements CohereClientInterface
     public function embedJob(): EmbedJob
     {
         return new EmbedJob($this);
+    }
+
+    public function connector(): Connector
+    {
+        return new Connector($this);
     }
 
     public function model(): Model

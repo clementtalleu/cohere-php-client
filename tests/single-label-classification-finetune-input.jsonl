@@ -1,0 +1,36 @@
+{"text": "The app is intuitive and works exactly as expected.", "label": "positive"}
+{"text": "Customer service was slow and unhelpful.", "label": "negative"}
+{"text": "It does the job, nothing more, nothing less.", "label": "neutral"}
+{"text": "Great experience from start to finish!", "label": "positive"}
+{"text": "The packaging was damaged and arrived late.", "label": "negative"}
+{"text": "The product is okay but could be improved.", "label": "neutral"}
+{"text": "Absolutely love it, would buy again.", "label": "positive"}
+{"text": "Didn’t live up to the hype, pretty disappointing.", "label": "negative"}
+{"text": "It's fine, but I’ve used better alternatives.", "label": "neutral"}
+{"text": "Fantastic quality and super easy to use.", "label": "positive"}
+{"text": "Terrible experience, I had to return it.", "label": "negative"}
+{"text": "Average performance for the price point.", "label": "neutral"}
+{"text": "Works well and exceeds expectations.", "label": "positive"}
+{"text": "The instructions were unclear and confusing.", "label": "negative"}
+{"text": "Satisfactory but not particularly impressive.", "label": "neutral"}
+{"text": "Exceeded my expectations in every way.", "label": "positive"}
+{"text": "Too expensive for what it offers.", "label": "negative"}
+{"text": "I neither loved nor hated it.", "label": "neutral"}
+{"text": "Super responsive and helpful support.", "label": "positive"}
+{"text": "Battery died within a week of use.", "label": "negative"}
+{"text": "It’s okay, I guess it depends on your needs.", "label": "neutral"}
+{"text": "A reliable product I’ll keep using.", "label": "positive"}
+{"text": "I regret buying this product.", "label": "negative"}
+{"text": "Neutral experience, not bad but not good.", "label": "neutral"}
+{"text": "Setup was quick and hassle-free.", "label": "positive"}
+{"text": "Some parts were missing from the box.", "label": "negative"}
+{"text": "Feels a bit underpowered, but usable.", "label": "neutral"}
+{"text": "Smooth experience and top-notch performance.", "label": "positive"}
+{"text": "Had to return it due to defects.", "label": "negative"}
+{"text": "It works, but has some noticeable flaws.", "label": "neutral"}
+{"text": "User-friendly design and very ergonomic.", "label": "positive"}
+{"text": "Shipping took far too long.", "label": "negative"}
+{"text": "It’s acceptable, not mind-blowing.", "label": "neutral"}
+{"text": "Definitely worth the money.", "label": "positive"}
+{"text": "Disappointing results overall.", "label": "negative"}
+{"text": "Nothing special, just average.", "label": "neutral"}

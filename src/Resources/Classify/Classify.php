@@ -17,11 +17,13 @@ final class Classify
      * @see https://docs.cohere.com/reference/classify
      *
      * @param string[] $inputs
-     * @param null|array{text: string, label: string} $examples
+     * @param array<int, array<string, string> $examples
      */
     public function create(string $fineTuneModelId, array $inputs, ?array $examples = [], ?array $params = []): ClassifyObject
     {
+        $params['model'] = $fineTuneModelId;
         $params['inputs'] = $inputs;
+        $params['examples'] = $examples;
         $response = $this->client->sendRequest('POST', '/v1/classify', $params);
 
         return ClassifyObject::create($response);

@@ -119,17 +119,19 @@ COHERE_API_KEY=your-api-key
 
 The following endpoints are supported:
 
-| Endpoint        | Class        | Description                                |
-|-----------------|--------------|--------------------------------------------|
-| `v2/embed`      | `Embed`      | Generate embeddings from input text        |
-| `v2/chat`       | `Chat`       | Perform conversational chat with a LLM     |
-| `v1/classify`   | `Classify`   | Text classification based on custom labels |
-| `v1/tokenize`   | `Tokenize`   | Token-level breakdown of input text        |
-| `v1/detokenize` | `Detokenize` | De-tokenify tokens to text                 |
-| `v1/connectors` | `Connector`  | Cohere connectors                          |
-| `v1/embed-jobs` | `EmbedJob`   | Async embed jobs                           |
-| `v2/rerank`     | `Rerank`     | Retrieve Cohere available models           |
-| `v1/models`     | `Model`      | Produces an ordered array with text        |
+| Endpoint        | Class        | Description                                             |
+|-----------------|--------------|---------------------------------------------------------|
+| `v2/embed`      | `Embed`      | Generate embeddings from input text                     |
+| `v2/chat`       | `Chat`       | Perform conversational chat with a LLM                  |
+| `v1/classify`   | `Classify`   | Text classification based on custom labels              |
+| `v1/tokenize`   | `Tokenize`   | Token-level breakdown of input text                     |
+| `v1/detokenize` | `Detokenize` | De-tokenify tokens to text                              |
+| `v1/connectors` | `Connector`  | Cohere connectors                                       |
+| `v1/embed-jobs` | `EmbedJob`   | Async embed jobs                                        |
+| `v2/rerank`     | `Rerank`     | Retrieve Cohere available models                        |
+| `v1/models`     | `Model`      | Produces an ordered array with text                     |
+| `v1/datasets`   | `Dataset`    | Create a dataset by uploading a file, retrieve datasets |
+| `v1/finetuning`   | `FineTuning` | Trains, deploy, list datasets                           |
 
 You can access them via:
 
@@ -137,8 +139,14 @@ You can access them via:
 $client->embed();
 $client->chat();
 $client->tokenize();
+$client->detokenize();
 $client->classify();
 $client->rerank();
+$client->dataset();
+$client->fineTuning();
+$client->model();
+$client->embedJob();
+$client->connector();
 // etc.
 ```
 
@@ -146,9 +154,7 @@ Then you can use it simple :
 
 ```php
 $connector = $client->connector()->create($name, $url, ['model' => 'command-a-03-2025']);
-
 $connector = $client->connector()->get($id);
-
 $connector = $client->connector()->list();
 ```
 

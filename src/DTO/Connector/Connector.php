@@ -7,28 +7,29 @@ namespace Talleu\CohereClient\DTO\Connector;
 final class Connector
 {
     /**
-     * @param string[] $excludes
-     * @param array{authorize_url: string, token_url: string, client_id: string, client_secret: string, scope: string} $oauth
+     * @param null|string[] $excludes
+     * @param null|array{authorize_url: string, token_url: string, client_id: string, client_secret: string, scope: string} $oauth
      */
     public function __construct(
         public string             $id,
         public string             $name,
         public \DateTimeImmutable $createdAt,
         public \DateTimeImmutable $updatedAt,
-        public string             $organizationId,
-        public string             $description,
-        public string             $url,
-        public array              $excludes,
-        public string             $authType,
-        public array              $oauth,
-        public string             $authStatus,
-        public bool               $active,
-        public bool               $continueOnFailure,
-    ) {
+        public ?bool               $active,
+        public ?bool               $continueOnFailure,
+        public ?string            $organizationId,
+        public ?string            $description,
+        public ?string            $url,
+        public ?array             $excludes,
+        public ?string            $authType,
+        public ?array             $oauth,
+        public ?string            $authStatus,
+    )
+    {
     }
 
     /**
-     * @param array{
+     * @param null|array{
      *     id: string,
      *     name: string,
      *     created_at: string,
@@ -57,15 +58,16 @@ final class Connector
             name: $data['name'],
             createdAt: new \DateTimeImmutable($data['created_at']),
             updatedAt: new \DateTimeImmutable($data['updated_at']),
-            organizationId: $data['organization_id'],
-            description: $data['description'],
-            url: $data['url'],
-            excludes: $data['excludes'],
-            authType: $data['auth_type'],
-            oauth: $data['oauth'],
-            authStatus: $data['auth_status'],
-            active: $data['active'],
-            continueOnFailure: $data['continue_on_failure'],
+            active: $data['active'] ?? null,
+            continueOnFailure: $data['continue_on_failure'] ?? null,
+            organizationId: $data['organization_id'] ?? null,
+            description: $data['description'] ?? null,
+            url: $data['url'] ?? null,
+            excludes: $data['excludes'] ?? null,
+            authType: $data['auth_type'] ?? null,
+            oauth: $data['oauth'] ?? null,
+            authStatus: $data['auth_status'] ?? null,
+
         );
     }
 }
