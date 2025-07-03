@@ -23,14 +23,16 @@ final class Chat
      */
     public function create(array $messages, ?array $params = []): ChatObject
     {
-        if (!array_key_exists('model', $params)) {
-            $params['model'] = self::DEFAULT_MODEL;
-        }
+        $body = array_merge(
+            ['model' => self::DEFAULT_MODEL],
+            $params,
+            [
+                'stream' => false,
+                'messages' => $messages,
+            ]
+        );
 
-        $params['stream'] = false;
-        $params['messages'] = $messages;
-
-        $response = $this->client->sendRequest('POST', '/v2/chat', $params);
+        $response = $this->client->sendRequest('POST', '/v2/chat', $body);
 
         return ChatObject::create($response);
     }

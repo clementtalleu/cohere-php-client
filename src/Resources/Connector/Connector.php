@@ -9,8 +9,6 @@ use Talleu\CohereClient\DTO\Connector\Connector as ConnectorObject;
 
 final class Connector
 {
-    public const DEFAULT_MODEL = 'command-a-03-2025';
-
     public function __construct(private CohereClient $client)
     {
     }
@@ -22,10 +20,12 @@ final class Connector
      */
     public function create(string $name, string $url, ?array $params = []): ConnectorObject
     {
-        $params['name'] = $name;
-        $params['url'] = $url;
+        $body = array_merge($params, [
+            'name' => $name,
+            'url' => $url,
+        ]);
 
-        $response = $this->client->sendRequest('POST', '/v1/connectors', $params);
+        $response = $this->client->sendRequest('POST', '/v1/connectors', $body);
 
         return ConnectorObject::create($response['connector']);
     }
@@ -74,8 +74,6 @@ final class Connector
      */
     public function delete(string $id): array
     {
-        $response = $this->client->sendRequest('DELETE', "/v1/connectors/$id");
-
-        return $response;
+        return $this->client->sendRequest('DELETE', "/v1/connectors/$id");
     }
 }

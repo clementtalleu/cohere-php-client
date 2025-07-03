@@ -28,11 +28,17 @@ final class FineTuning
      *     wandb: null|array{project: string, api_key: string, entity: null|string}
      * } $settings
      */
-    public function create(string $name, array $settings, ?array $params = []): FineTunedModel
+    public function create(string $name, array $settings, array $params = []): FineTunedModel
     {
-        $params['name'] = $name;
-        $params['settings'] = $settings;
-        $response = $this->client->sendRequest('POST', '/v1/finetuning/finetuned-models', $params);
+        $body = array_merge(
+            $params,
+            [
+                'name' => $name,
+                'settings' => $settings,
+            ]
+        );
+
+        $response = $this->client->sendRequest('POST', '/v1/finetuning/finetuned-models', $body);
 
         return FineTunedModel::create($response['finetuned_model']);
     }
@@ -47,11 +53,17 @@ final class FineTuning
      *     wandb: null|array{project: string, api_key: string, entity: null|string}
      * } $settings
      */
-    public function patch(string $id, string $name, array $settings, ?array $params = []): FineTunedModel
+    public function patch(string $id, string $name, array $settings, array $params = []): FineTunedModel
     {
-        $params['name'] = $name;
-        $params['settings'] = $settings;
-        $response = $this->client->sendRequest('PATCH', "/v1/finetuning/finetuned-models/$id", $params);
+        $body = array_merge(
+            $params,
+            [
+                'name' => $name,
+                'settings' => $settings,
+            ]
+        );
+
+        $response = $this->client->sendRequest('PATCH', "/v1/finetuning/finetuned-models/$id", $body);
 
         return FineTunedModel::create($response['finetuned_model']);
     }
@@ -72,9 +84,7 @@ final class FineTuning
      */
     public function delete(string $id): array
     {
-        $response = $this->client->sendRequest('DELETE', "/v1/finetuning/finetuned-models/$id");
-
-        return $response;
+        return $this->client->sendRequest('DELETE', "/v1/finetuning/finetuned-models/$id");
     }
 
     /**

@@ -19,19 +19,14 @@ final class Dataset
      * @see https://docs.cohere.com/reference/create-dataset
      * @param array<string, mixed> $params
      */
-    public function create(string $name, string $type, string $filePath, ?array $params = []): CreateDataset
+    public function create(string $name, string $type, string $filePath, array $params = []): CreateDataset
     {
-        $query = [
+        $queryParams = array_merge($params, [
             'name' => $name,
             'type' => $type,
-        ];
+        ]);
 
-        if (!empty($params)) {
-            $query = array_merge($query, $params);
-        }
-
-        $queryString = http_build_query($query);
-        $path = '/v1/datasets?' . $queryString;
+        $path = '/v1/datasets?' . http_build_query($queryParams);
 
         $response = $this->client->sendMultipartRequest(
             method: 'POST',
@@ -48,17 +43,16 @@ final class Dataset
      * @see https://docs.cohere.com/reference/list-datasets
      * @return DatasetObject[]
      */
-    public function list(?array $params = []): array
+    public function list(array $params = []): array
     {
-        $query = http_build_query($params);
-        $response = $this->client->sendRequest('GET', "/v1/datasets?$query");
-
-        $datasets = [];
-        foreach ($response['datasets'] as $dataset) {
-            $datasets[] = DatasetObject::create($dataset);
+        $path = '/v1/datasets';
+        if (!empty($params)) {
+            $path .= '?' . http_build_query($params);
         }
 
-        return $datasets;
+        $response = $this->client->sendRequest('GET', $path);
+
+        return array_map([DatasetObject::class, 'create'], $response['datasets']);
     }
 
     /**
@@ -87,8 +81,6 @@ final class Dataset
      */
     public function delete(string $id): array
     {
-        $response = $this->client->sendRequest('DELETE', "/v1/datasets/$id");
-
-        return $response;
+        return $this->client->sendRequest('DELETE', "/v1/datasets/$id");
     }
 }

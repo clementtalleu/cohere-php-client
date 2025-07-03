@@ -21,10 +21,16 @@ final class Classify
      */
     public function create(string $fineTuneModelId, array $inputs, ?array $examples = [], ?array $params = []): ClassifyObject
     {
-        $params['model'] = $fineTuneModelId;
-        $params['inputs'] = $inputs;
-        $params['examples'] = $examples;
-        $response = $this->client->sendRequest('POST', '/v1/classify', $params);
+        $body = array_merge(
+            $params,
+            [
+                'model' => $fineTuneModelId,
+                'inputs' => $inputs,
+                'examples' => $examples,
+            ]
+        );
+
+        $response = $this->client->sendRequest('POST', '/v1/classify', $body);
 
         return ClassifyObject::create($response);
     }

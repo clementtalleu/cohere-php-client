@@ -21,16 +21,18 @@ final class Rerank
      * @param string[] $documents
      * @param array<string, mixed> $params
      */
-    public function create(string $query, array $documents, ?array $params = []): RerankObject
+    public function create(string $query, array $documents, array $params = []): RerankObject
     {
-        if (!array_key_exists('model', $params)) {
-            $params['model'] = self::DEFAULT_MODEL;
-        }
+        $body = array_merge(
+            ['model' => self::DEFAULT_MODEL],
+            $params,
+            [
+                'query' => $query,
+                'documents' => $documents,
+            ]
+        );
 
-        $params['query'] = $query;
-        $params['documents'] = $documents;
-
-        $response = $this->client->sendRequest('POST', '/v2/rerank', $params);
+        $response = $this->client->sendRequest('POST', '/v2/rerank', $body);
 
         return RerankObject::create($response);
     }

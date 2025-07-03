@@ -18,14 +18,15 @@ final class Tokenize
     /**
      * @see https://docs.cohere.com/reference/tokenize
      */
-    public function create(string $text, ?array $params = []): TokenizeObject
+    public function create(string $text, array $params = []): TokenizeObject
     {
-        if (!array_key_exists('model', $params)) {
-            $params['model'] = self::DEFAULT_MODEL;
-        }
+        $body = array_merge(
+            ['model' => self::DEFAULT_MODEL],
+            $params,
+            ['text' => $text]
+        );
 
-        $params['text'] = $text;
-        $response = $this->client->sendRequest('POST', '/v1/tokenize', $params);
+        $response = $this->client->sendRequest('POST', '/v1/tokenize', $body);
 
         return TokenizeObject::create($response);
     }

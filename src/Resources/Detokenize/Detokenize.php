@@ -18,14 +18,15 @@ final class Detokenize
     /**
      * @see https://docs.cohere.com/reference/detokenize
      */
-    public function create(array $tokens, ?array $params = []): DetokenizeObject
+    public function create(array $tokens, array $params = []): DetokenizeObject
     {
-        if (!array_key_exists('model', $params)) {
-            $params['model'] = self::DEFAULT_MODEL;
-        }
+        $body = array_merge(
+            ['model' => self::DEFAULT_MODEL],
+            $params,
+            ['tokens' => $tokens]
+        );
 
-        $params['tokens'] = $tokens;
-        $response = $this->client->sendRequest('POST', '/v1/detokenize', $params);
+        $response = $this->client->sendRequest('POST', '/v1/detokenize', $body);
 
         return DetokenizeObject::create($response);
     }
