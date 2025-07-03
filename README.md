@@ -156,7 +156,9 @@ Each endpoint returns a strongly typed DTO with the result of the API call.
 - [Connector](docs/connector.md)
 - [Classify](docs/classify.md)
 - [Fine Tuning](docs/fine-tuning.md)
+- [Dataset](docs/dataset.md)
 - [Embed jobs](docs/embed-job.md)
+- [A tutorial for Fine-tune and Classify a dataset](docs/embed-job.md)
 
 ## Documentation 📚
 

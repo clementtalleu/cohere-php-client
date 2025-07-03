@@ -19,12 +19,13 @@ final class Dataset
         public \DateTimeImmutable $updatedAt,
         public string             $datasetType,
         public string             $validationStatus,
-        public string             $validationError,
+        public ?string            $validationError = null,
         public ?string            $schema = null,
         public array              $requiredFields,
         public array              $preserveFields,
         public array              $datasetParts,
         public array              $validationWarnings,
+        public array              $metrics,
     )
     {
     }
@@ -38,12 +39,13 @@ final class Dataset
             updatedAt: new \DateTimeImmutable($data['updated_at']),
             datasetType: $data['dataset_type'],
             validationStatus: $data['validation_status'],
-            validationError: $data['validation_error'],
+            validationError: $data['validation_error'] ?? null,
             schema: $data['schema'] ?? null,
             requiredFields: $data['required_fields'] ?? [],
             preserveFields: $data['preserve_fields'] ?? [],
             datasetParts: $data['dataset_parts'],
             validationWarnings: $data['validation_warnings'] ?? [],
+            metrics: $data['metrics'] ?? [],
         );
     }
 }

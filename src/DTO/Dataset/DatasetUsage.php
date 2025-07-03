@@ -7,7 +7,7 @@ namespace Talleu\CohereClient\DTO\Dataset;
 final class DatasetUsage
 {
     public function __construct(
-        public int $organisationUsage,
+        public string $organisationUsage,
     )
     {
     }
@@ -15,7 +15,7 @@ final class DatasetUsage
     public static function create(array $data): self
     {
         return new self(
-            organisationUsage: $data['organization_usage'],
+            organisationUsage: (string) $data['organization_usage'],
         );
     }
 }
