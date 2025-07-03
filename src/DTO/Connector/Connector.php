@@ -24,8 +24,7 @@ final class Connector
         public ?string            $authType,
         public ?array             $oauth,
         public ?string            $authStatus,
-    )
-    {
+    ) {
     }
 
     /**
@@ -67,7 +66,6 @@ final class Connector
             authType: $data['auth_type'] ?? null,
             oauth: $data['oauth'] ?? null,
             authStatus: $data['auth_status'] ?? null,
-
         );
     }
 }

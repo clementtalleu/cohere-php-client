@@ -10,8 +10,7 @@ final class StepMetric
         public \DateTimeImmutable $createdAt,
         public int                $stepNumber,
         public Metrics            $metrics
-    )
-    {
+    ) {
     }
 
     public static function create(array $data): self

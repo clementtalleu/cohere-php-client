@@ -8,8 +8,7 @@ final class DatasetUsage
 {
     public function __construct(
         public string $organisationUsage,
-    )
-    {
+    ) {
     }
 
     public static function create(array $data): self

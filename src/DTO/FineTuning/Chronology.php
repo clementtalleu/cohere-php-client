@@ -13,8 +13,7 @@ final class Chronology
         public array   $events,
         public ?string $nextPageToken,
         public ?int    $totalSize
-    )
-    {
+    ) {
     }
 
     public static function create(array $data): self

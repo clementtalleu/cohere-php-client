@@ -19,14 +19,13 @@ final class FineTunedModel
         public string              $name,
         public array               $settings,
         public string              $creatorId,
-        public ?string             $organisationId = null,
         public string              $status,
+        public ?string             $organisationId = null,
         public ?\DateTimeImmutable $createdAt = null,
         public ?\DateTimeImmutable $updatedAt = null,
         public ?\DateTimeImmutable $completedAt = null,
         public ?\DateTimeImmutable $lastUsed = null,
-    )
-    {
+    ) {
     }
 
     /**
@@ -51,12 +50,12 @@ final class FineTunedModel
     public static function create(array $data): self
     {
         return new self(
+            id: $data['id'],
             name: $data['name'],
             settings: $data['settings'],
-            id: $data['id'],
             creatorId: $data['creator_id'],
-            organisationId: $data['organisation_id'] ?? null,
             status: $data['status'],
+            organisationId: $data['organisation_id'] ?? null,
             createdAt: isset($data['created_at']) ? new \DateTimeImmutable($data['created_at']) : null,
             updatedAt: isset($data['updated_at']) ? new \DateTimeImmutable($data['updated_at']) : null,
             completedAt: isset($data['completed_at']) ? new \DateTimeImmutable($data['completed_at']) : null,

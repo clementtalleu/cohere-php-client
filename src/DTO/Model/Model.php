@@ -17,8 +17,8 @@ final class Model
         public bool    $fineTuned,
         public float   $contextLength,
         public ?string $tokenizerUrl = null,
-        public bool    $supportVision,
-        public array   $defaultEndpoints,
+        public ?bool   $supportVision = null,
+        public ?array  $defaultEndpoints = [],
         public ?array  $features = []
     )
     {
@@ -28,7 +28,7 @@ final class Model
      * @param array{
      *     name: string,
      *     endpoints: string[],
-     *     fine_tuned: bool,
+     *     finetuned: bool,
      *     context_length: float,
      *     tokenizer_url: string,
      *     support_vision: bool,

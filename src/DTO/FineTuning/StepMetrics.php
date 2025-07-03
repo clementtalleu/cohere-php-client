@@ -9,8 +9,7 @@ final class StepMetrics
     public function __construct(
         public array  $stepMetrics,
         public string $nextPageToken
-    )
-    {
+    ) {
     }
 
     public static function create(array $data): self

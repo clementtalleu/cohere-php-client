@@ -10,8 +10,7 @@ final class Event
         public string             $userId,
         public string             $status,
         public \DateTimeImmutable $createdAt,
-    )
-    {
+    ) {
     }
 
     public static function create(array $data): self

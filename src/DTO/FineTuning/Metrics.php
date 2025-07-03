@@ -12,8 +12,7 @@ final class Metrics
         public float $generationAccuracy,
         public float $generationCrossEntropy,
         public int   $step
-    )
-    {
+    ) {
     }
 
     public static function create(array $data): self
