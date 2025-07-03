@@ -8,7 +8,9 @@ use Http\Discovery\Psr18ClientDiscovery;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestFactoryInterface;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamFactoryInterface;
+use Talleu\CohereClient\Exception\CohereApiException;
 use Talleu\CohereClient\Resources\Chat\Chat;
 use Talleu\CohereClient\Resources\Classify\Classify;
 use Talleu\CohereClient\Resources\Connector\Connector;
@@ -20,6 +22,7 @@ use Talleu\CohereClient\Resources\FineTuning\FineTuning;
 use Talleu\CohereClient\Resources\Model\Model;
 use Talleu\CohereClient\Resources\Rerank\Rerank;
 use Talleu\CohereClient\Resources\Tokenize\Tokenize;
+use Http\Message\MultipartStream\MultipartStreamBuilder;
 
 final class CohereClient implements CohereClientInterface
 {
@@ -97,68 +100,81 @@ final class CohereClient implements CohereClientInterface
 
     public function sendRequest(string $method, string $path, ?array $body = null): array
     {
-        $request = $this->requestFactory->createRequest($method, $this->baseUri.$path)
+        $request = $this->requestFactory->createRequest($method, $this->baseUri . $path)
             ->withHeader('Authorization', 'Bearer ' . $this->apiKey)
             ->withHeader('Content-Type', 'application/json')
             ->withHeader('Accept', 'application/json');
 
         if ($this->clientName) {
-            $request->withHeader('X-Client-Name', $this->clientName);
+            $request = $request->withHeader('X-Client-Name', $this->clientName);
         }
-        
+
         if ($body) {
-            $payload = json_encode($body, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $payload = json_encode($body, JSON_UNESCAPED_UNICODE);
             $stream = $this->streamFactory->createStream($payload);
             $request = $request->withBody($stream);
         }
-        
+
         $response = $this->httpClient->sendRequest($request);
-        $statusCode = $response->getStatusCode();
-        $bodyResponse = json_decode($response->getBody()->getContents(), true);
-        
-        if (($statusCode = $response->getStatusCode()) >= 400) {
-            
-            throw new \RuntimeException(sprintf(
-                'Cohere API returned HTTP %d: %s',
-                $statusCode,
-                $bodyResponse['message']
-            ));
-        }
-        
-        return $bodyResponse;
+
+        return $this->handleResponse($response);
     }
 
-    public function sendMultipartRequest(string $method, string $path, array $formFields, string $fileFieldName, string $filePath): array
-    {
-        $boundary = uniqid('boundary_');
+    public function sendMultipartRequest(
+        string $method,
+        string $path,
+        array $formFields,
+        string $fileFieldName,
+        string $filePath,
+        ?string $fileMimeType = null
+    ): array {
+        $builder = new MultipartStreamBuilder($this->streamFactory);
 
-        $bodyParts = [];
         foreach ($formFields as $name => $value) {
-            $bodyParts[] = "--$boundary\r\n" .
-                "Content-Disposition: form-data; name=\"$name\"\r\n\r\n" .
-                "$value\r\n";
+            $builder->addResource($name, $value);
         }
 
-        $filename = basename($filePath);
-        $fileContents = file_get_contents($filePath);
+        $fileResource = fopen($filePath, 'r');
+        if ($fileResource === false) {
+            throw new \RuntimeException("Unable to open file : " . $filePath);
+        }
 
-        $bodyParts[] = "--$boundary\r\n" .
-            "Content-Disposition: form-data; name=\"$fileFieldName\"; filename=\"$filename\"\r\n" .
-            "Content-Type: application/jsonl\r\n\r\n" .
-            "$fileContents\r\n";
+        $builder->addResource($fileFieldName, $fileResource, [
+            'filename' => basename($filePath),
+            // Automatic detect of mime type if none provided
+            'headers' => ['Content-Type' => $fileMimeType ?? mime_content_type($filePath) ?: 'application/octet-stream']
+        ]);
 
-        $bodyParts[] = "--$boundary--\r\n";
+        $multipartStream = $builder->build();
+        $boundary = $builder->getBoundary();
 
-        $multipartBody = implode('', $bodyParts);
-        $stream = $this->streamFactory->createStream($multipartBody);
-
-        $request = $this->requestFactory->createRequest($method, $this->baseUri.$path)
+        $request = $this->requestFactory->createRequest($method, $this->baseUri . $path)
             ->withHeader('Authorization', "Bearer {$this->apiKey}")
-            ->withHeader('Content-Type', "multipart/form-data; boundary=$boundary")
-            ->withBody($stream);
+            ->withHeader('Content-Type', 'multipart/form-data; boundary=' . $boundary)
+            ->withBody($multipartStream);
+
 
         $response = $this->httpClient->sendRequest($request);
 
-        return json_decode($response->getBody()->getContents(), true);
+        return $this->handleResponse($response);
+    }
+
+    private function handleResponse(ResponseInterface $response): array
+    {
+        $responseContents = $response->getBody()->getContents();
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode < 200 || $statusCode >= 300) {
+            $errorData = json_decode($responseContents, true);
+            $errorMessage = $errorData['message'] ?? $responseContents;
+
+            throw new CohereApiException(sprintf(
+                'Cohere API returned HTTP %d: %s',
+                $statusCode,
+                $errorMessage
+            ), $statusCode);
+        }
+
+        return json_decode($responseContents, true);
     }
 }
