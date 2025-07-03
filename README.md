@@ -146,6 +146,12 @@ $connector = $client->connector()->list();
 
 Each endpoint returns a strongly typed DTO with the result of the API call.
 
+To send a request without using provided resources, you can use directly the CohereClient sendRequesst() method
+
+```php
+$chat = Cohere::client()->sendRequest('GET', '/v2/chat', $body);
+```
+
 ## 📚 Documentation by endpoints
 
 - [Embedding](docs/embed.md)
