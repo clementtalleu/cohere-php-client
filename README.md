@@ -10,8 +10,8 @@
 A PHP client to interact with the [Cohere® API](https://cohere.com/), designed to be framework-agnostic, simple to use,
 and fully compatible with [PSR-18](https://www.php-fig.org/psr/psr-18/).
 
-This package provides an easy and structured way to use Cohere's powerful language models — for **embeddings**, **chat
-**, **classification**, **tokenization**, and more — in any PHP project.
+This package provides an easy and structured way to use Cohere's powerful language models — for **embeddings**, **chat**,
+**classification**, **tokenization**, and more — in any PHP project.
 
 ---
 
