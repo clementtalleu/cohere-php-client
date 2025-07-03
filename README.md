@@ -19,7 +19,6 @@ This package provides an easy and structured way to use Cohere's powerful langua
 
 - ✅ Support for **Cohere API v1/v2** endpoints (chat, embed, classify, tokenize, etc.)
 - ✅ Compatible with any **PSR-18 HTTP Client**
-- ✅ Support for **Symfony integration** (optional bundle)
 - ✅ File upload and multipart support
 - ✅ Developer-friendly DTOs and response builders
 - ✅ Easily extendable with your own endpoints
