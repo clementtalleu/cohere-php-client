@@ -158,6 +158,8 @@ Each endpoint returns a strongly typed DTO with the result of the API call.
 - [Fine Tuning](docs/fine-tuning.md)
 - [Dataset](docs/dataset.md)
 - [Embed jobs](docs/embed-job.md)
+- [Tokenize](docs/tokenize.md)
+- [Detokenize](docs/detokenize.md)
 - [A tutorial for Fine-tune and Classify a dataset](docs/embed-job.md)
 
 ## Documentation 📚
