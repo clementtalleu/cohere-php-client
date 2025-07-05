@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types=1);
 
 namespace Talleu\CohereClient\Client;
 
@@ -18,7 +17,6 @@ final class Cohere
         ?RequestFactoryInterface $requestFactory = null,
         ?StreamFactoryInterface $streamFactory = null,
     ): CohereClient {
-
 
         return new CohereClient(
             $apiKey,

@@ -9,3 +9,5 @@ test.php
 Makefile
 coverage.xml
 composer.lock
+.env
+.env.test

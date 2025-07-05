@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Talleu\CohereClient\DTO\Chat;
 
 final class Chat

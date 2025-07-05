@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Talleu\CohereClient\Client;
 
 use Http\Discovery\Psr18ClientDiscovery;
@@ -26,7 +24,7 @@ use Http\Message\MultipartStream\MultipartStreamBuilder;
 
 final class CohereClient implements CohereClientInterface
 {
-    public const COHERE_API_BASE_URL = 'https://api.cohere.com';
+    private const COHERE_API_BASE_URL = 'https://api.cohere.com';
 
     public function __construct(
         private ?string $apiKey = null,
